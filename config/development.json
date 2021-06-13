@@ -1,0 +1,7 @@
+{
+	"api":[{
+		"name":"<api name>",
+		"method":["GET","POST"],
+		"enable":true
+		}]
+}
