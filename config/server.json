@@ -2,10 +2,23 @@
 	"env":"development",
 	"ip":"0.0.0.0",
 	"port":"8080",
-	"api":[
-		{
+	"auth":{
+		"a597f266490102a0e1ac290b270c5df6":
+			{
+				"name":"Sanklan Test",
+				"secret":"dad408374b5fbf062f58674eabcb373c",
+				"allowed_api":{
+					"log_csv":["read","write"]
+				},
+				"user_id":"1",
+				"dataset_id":"4"
+			}
+		},
+	"api":{
+		"log_csv":{
 			"name":"<api name>",
-			"configuration":[]
+			"configuration":[],
+                        "allowed_operation":["read","write"]            
 		}
-	]
+	}
 }
