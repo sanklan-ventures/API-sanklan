@@ -23,13 +23,7 @@ exports.urlToPlugin=function(requestData,serverData)
 	//---check the method
 	//---Call the function
 	//------
-	//console.log("---Path::"+path+"::--method--::"+method);
-	//console.log("---Data::"+pathSplit);
-	//console.log("---Headers::"+JSON.stringify(requestData.headers));
-	console.log("---Authorization::"+requestData.headers['authorization']);
-	
-	console.log("Data--------");
-	//console.log(requestData.body.data.text);
+	console.log("---Path::"+path+"::--method--::"+method);
 	
 	var authToken=requestData.headers['authorization'];
 	//------------
@@ -60,17 +54,6 @@ exports.urlToPlugin=function(requestData,serverData)
 		//-------------
 		//--Check if already included
 		//------------
-        	/*
-		 * requestData.on('data', function(chunk) {
-                	console.log(chunk.toString());
-                	content=chunk.toString();
-                	console.log("----Content---");
-                	console.log(content);
-        	})
-        	requestData.on('end',()=>{
-                	console.log("COntent");
-                	console.log(content);
-        	*/
 		if(pathSplit[1]+"/"+pathSplit[2] == "log/csv")
 		{
 			//----------

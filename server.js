@@ -12,7 +12,6 @@ var loadModule=require("./customlib/loadModule");
 //----------
 var modules=loadModule.loadAllModule(serverConfig);
 
-//console.log(modules);
 
 //------
 //--Print config
@@ -43,20 +42,16 @@ var server=http.createServer(function(request,response){
         response.statusCode = 200;
         response.setHeader('Content-Type', 'text/plain');
 	urlResult=urlParser.urlToPlugin(request,serverConfig);
-	//console.log(JSON.stringify(request));
 	//-----
 	//--Needed request body
 	//-----
 	let content="";
 	
 	request.on('data', function(chunk) {
-		//--console.log(chunk.toString());
 		content=chunk.toString();
-		//--console.log("----Content---");
-		//--console.log(content);
 	})
 	request.on('end',()=>{
-		console.log("COntent");
+		console.log("Content");
 		console.log(content);
 
 		if(urlResult===false)
@@ -74,7 +69,7 @@ var server=http.createServer(function(request,response){
 			//console.log(contentData);
 
 			var fn = modules[urlResult['module']][urlResult['submodule']][urlResult['module']+"_"+urlResult['submodule']];
-			console.log(urlResult);
+			//--console.log(urlResult);
 			//---------------
 			//---Check if path is set of not
 			//---Check it content is set or not

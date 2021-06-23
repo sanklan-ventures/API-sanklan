@@ -62,25 +62,6 @@ function checkOrCreate(path,datasetId,create=true)
 		}
 	}
 	return true;
-	/*
-	var fileName=path+"/"+generateFileName(datasetId);
-	try
-	{
-		if(checkData("",{}))
-		{
-			console.log("Writting into file");
-			fs.writeFile(fileName, data,  {encoding: "utf8",flag: "a+",mode: 0o666});
-		}
-		else
-		{
-			console.log("Pattern not matched");
-		}
-	}
-	catch(e)
-	{
-		console.log("Error at writting into file ::"+e);
-	}
-	*/
 }
 
 function checkData(allowed,data,pattern)
@@ -118,15 +99,7 @@ function checkData(allowed,data,pattern)
 			}
 			else if(typeof data[patternKey] === pattern[patternKey].toLowerCase())
                 	{
-				//csvContent+=data[patternKey];
-				//if(pattern[patternKey].toLowerCase()=="string")
-				//{
-					csvContent+=JSON.stringify(data[patternKey]);
-				//}
-
-				//else
-				//{
-				//}
+				csvContent+=JSON.stringify(data[patternKey]);
                         	counter++;
                         	console.log("KEY:::"+patternKey);
                         	console.log("Value:::"+pattern[patternKey]);
@@ -152,7 +125,6 @@ function checkData(allowed,data,pattern)
 	}
 	console.log("Success");
 	return csvContent;
-	//return true;
 }
 
 function generatePath(path)
