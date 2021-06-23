@@ -2,6 +2,7 @@
 	"env":"development",
 	"ip":"0.0.0.0",
 	"port":"8080",
+	"allowed":["STRING","NUMBER"],
 	"auth":{
 		"a597f266490102a0e1ac290b270c5df6":
 			{
@@ -11,7 +12,9 @@
 					"log_csv":["read","write"]
 				},
 				"user_id":"1",
-				"dataset_id":"4"
+				"dataset_id":"4",
+				"parent_directory":"/data",
+				"pattern":{"first_name":"string","middle_name":"string","last_name":"string"}
 			}
 		},
 	"api":{

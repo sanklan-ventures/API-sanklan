@@ -3,6 +3,7 @@
 //--Parse URL and get the relevant data
 //-----------
 var url = require('url');
+var bodyParser = require('body-parser')
 //------------
 //--Check the server data
 //------------
@@ -25,16 +26,23 @@ exports.urlToPlugin=function(requestData,serverData)
 	//console.log("---Path::"+path+"::--method--::"+method);
 	//console.log("---Data::"+pathSplit);
 	//console.log("---Headers::"+JSON.stringify(requestData.headers));
-	//console.log("---Authorization::"+requestData.headers['authorization']);
+	console.log("---Authorization::"+requestData.headers['authorization']);
 	
+	console.log("Data--------");
+	//console.log(requestData.body.data.text);
+	
+	var authToken=requestData.headers['authorization'];
 	//------------
 	//--Check authentication
 	//---------
-	if(!checkAuthentication(requestData.headers['authorization'],serverData))
+	if(!checkAuthentication(authToken,serverData))
 	{
 		return false;
 	}
 
+	//var content="";
+
+	//console.log("Content:::--"+content+",,,::::");
 	//-----------
 	//---If it comes here means
 	//---Authroization passed
@@ -43,6 +51,7 @@ exports.urlToPlugin=function(requestData,serverData)
 
   	if(pathSplit.length>=2)
 	{
+		var content="";
 		//------------
 		//--Check the API
 		//--And on the basis of data
@@ -51,6 +60,17 @@ exports.urlToPlugin=function(requestData,serverData)
 		//-------------
 		//--Check if already included
 		//------------
+        	/*
+		 * requestData.on('data', function(chunk) {
+                	console.log(chunk.toString());
+                	content=chunk.toString();
+                	console.log("----Content---");
+                	console.log(content);
+        	})
+        	requestData.on('end',()=>{
+                	console.log("COntent");
+                	console.log(content);
+        	*/
 		if(pathSplit[1]+"/"+pathSplit[2] == "log/csv")
 		{
 			//----------
@@ -60,14 +80,15 @@ exports.urlToPlugin=function(requestData,serverData)
 			//----If the module is POST -- update
 			//---If the module is PUT -- write
 			//------------
-			
+			var path=serverData['auth'][authToken]['parent_directory']+"/"+serverData['auth'][authToken]['user_id']+"/"+serverData['auth'][authToken]['dataset_id']+"/";
+
 			if(method=="GET")
 			{
-				return {"module":pathSplit[1]+"_"+pathSplit[2],"submodule":"read","content":{}};
+				return {"module":pathSplit[1]+"_"+pathSplit[2],"submodule":"read","content":content,"path":path,'dataset_id':serverData['auth'][authToken]['dataset_id'],'pattern':serverData['auth'][authToken]['pattern']};
 			}
 			else if(method=="PUT")
 			{
-				return {"module":pathSplit[1]+"_"+pathSplit[2],"submodule":"write","content":{}};
+				return {"module":pathSplit[1]+"_"+pathSplit[2],"submodule":"write","content":content,"path":path,'dataset_id':serverData['auth'][authToken]['dataset_id'],'pattern':serverData['auth'][authToken]['pattern']};
 			}
 			else
 			{

@@ -27,36 +27,69 @@ if(serverConfig['env']=="production")
 	envConfig=require("./config/production.json");
 }
 
+//----------
+//--Check if things are allowed
+//----------
+if(typeof serverConfig['allowed']==="undefined" || Object.keys(serverConfig['allowed']).length==0)
+{
+	return false;
+}
 
 var server=http.createServer(function(request,response){
 	//------------
 	//---Check all the API's that is allowed to run in server.json
 	//---Iterativly create the path for same
 	//-----------
-
         response.statusCode = 200;
         response.setHeader('Content-Type', 'text/plain');
 	urlResult=urlParser.urlToPlugin(request,serverConfig);
-	//console.log("++----+++"+urlResult);
-	if(urlResult===false)
-	{
-		response.end("Error");
-		//response.end('Inside Path /log/csv/\n');
-	}
-	else
-	{
-		var fn = modules[urlResult['module']][urlResult['submodule']][urlResult['module']+"_"+urlResult['submodule']];
-		if(fn("test",modules['content']))
-		{
-			response.end("success");
-		}
-		else
+	//console.log(JSON.stringify(request));
+	//-----
+	//--Needed request body
+	//-----
+	let content="";
+	
+	request.on('data', function(chunk) {
+		//--console.log(chunk.toString());
+		content=chunk.toString();
+		//--console.log("----Content---");
+		//--console.log(content);
+	})
+	request.on('end',()=>{
+		console.log("COntent");
+		console.log(content);
+
+		if(urlResult===false)
 		{
 			response.end("Error");
 		}
-		//response.end('Hello, World!\n');
-	}
+		else
+		{
+			//------------
+			//--Check the directory defined in serverconfig
+			//--Fetch it and write the code
+			//------------
+			var contentData=JSON.parse(content);
+			//console.log("Content Data");
+			//console.log(contentData);
 
+			var fn = modules[urlResult['module']][urlResult['submodule']][urlResult['module']+"_"+urlResult['submodule']];
+			console.log(urlResult);
+			//---------------
+			//---Check if path is set of not
+			//---Check it content is set or not
+			//---------------
+			if(fn(serverConfig['allowed'],urlResult['path'],contentData,urlResult['pattern'],urlResult['dataset_id']))
+			{
+				response.end("success");
+			}
+			else
+			{
+				response.end("Error");
+			}
+			//response.end('Hello, World!\n');
+		}
+	});
 });
 
 server.listen(serverConfig['port'],serverConfig['ip']);
